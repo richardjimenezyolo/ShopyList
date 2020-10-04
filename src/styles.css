@@ -1,0 +1,16 @@
+.bg{
+	--ion-background-color: #000;
+	--ion-text-color: white;
+}
+
+#loginTitle{
+	display: flex;
+	justify-content: center;
+}
+
+#login{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100vw;
+}
