@@ -18,8 +18,6 @@ class List extends React.Component<IProp, IState> {
 	constructor(props: IProp) {
 		super(props)
 
-		console.log(props)
-
 		this.state = {
 			lts: []
 		}
@@ -35,7 +33,7 @@ class List extends React.Component<IProp, IState> {
 						return (
 							<div key={idx}>
 								<IonList >
-								
+
 									<IonItem color="dark">
 										<IonCheckbox
 											slot="start"
@@ -44,8 +42,8 @@ class List extends React.Component<IProp, IState> {
 											mode="ios"
 										/>
 
-										<IonLabel>{ val.name }</IonLabel>
-									
+										<IonLabel>{val.name}</IonLabel>
+
 									</IonItem>
 
 									<IonItemDivider />
