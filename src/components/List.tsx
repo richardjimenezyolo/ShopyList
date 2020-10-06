@@ -35,13 +35,11 @@ class List extends React.Component<IProp, IState> {
 			console.log("loading List:", this.props.cartId)
 			db.collection('carts').where("id", "==", this.props.cartId).onSnapshot(docs => {
 
-				this.setState({ lts: [] })
 
 				docs.forEach(doc => {
 
-					this.setState({ lts: [] })
-
 					db.collection('carts').doc(doc.id).collection('items').onSnapshot(items => {
+						this.setState({ lts: [] })
 						items.forEach(i => {
 
 							console.log(i.data())

@@ -14,7 +14,8 @@ class Login extends React.Component {
 			if (user) {
 				console.log('user')
 				db.collection('users').add({
-					uid: user.uid
+					uid: user.uid,
+					cart: 0
 				})
 				location.href = "#/";
 			}

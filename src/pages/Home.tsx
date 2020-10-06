@@ -98,6 +98,13 @@ class Home extends React.Component<{}, IState> {
 							</IonAvatar>
 
 							<IonLabel>{this.state.displayName}</IonLabel>
+							
+						</IonItem>
+
+						<IonItem color="dark">
+							<IonLabel>
+								Cart Id: {this.state.cart}
+							</IonLabel>
 						</IonItem>
 
 						<IonItemDivider color="dark" />
@@ -129,7 +136,7 @@ class Home extends React.Component<{}, IState> {
 					<IonSearchbar color="dark" />
 
 					<h1>Shopping List:</h1>
-					<h2>Cart Id: {this.state.cart} </h2>
+					
 
 					<List cartId={this.state.cart} />
 
@@ -144,7 +151,7 @@ class Home extends React.Component<{}, IState> {
 						</IonFabButton>
 					</IonFab>
 
-					<IonAlert isOpen={this.state.alert} message={this.state.cart} header="Your new cart Id:" />
+					<IonAlert isOpen={this.state.alert} message={this.state.cart} header="Your new cart Id:" onDidDismiss={_ => location.reload()} />
 
 					<IonAlert isOpen={this.state.addAlert} header="Add a new Item" inputs={[
 						{
