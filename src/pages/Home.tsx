@@ -39,12 +39,11 @@ class Home extends React.Component<{}, IState> {
 			avatarImg: "",
 			displayName: "",
 			cart: '',
-			addAlert: true
+			addAlert: false
 		};
 
 		auth.onAuthStateChanged((user) => {
 			if (user) {
-				console.log(user);
 				this.setState({
 					uid: user.uid,
 					avatarImg: user.photoURL,
@@ -132,9 +131,11 @@ class Home extends React.Component<{}, IState> {
 					<h1>Shopping List:</h1>
 					<h2>Cart Id: {this.state.cart} </h2>
 
-					<List />
+					<List cartId={this.state.cart} />
 
-					<IonFab vertical="bottom" horizontal="end">
+					<IonFab vertical="bottom" horizontal="end" style={{
+						position: 'fixed'
+					}} >
 						<IonFabButton
 							color="danger"
 							onClick={(_) => this.setState({ addAlert: true })}
@@ -166,7 +167,9 @@ class Home extends React.Component<{}, IState> {
 									docs.forEach(doc => {
 										db.collection('carts').doc(doc.id).collection('items').add({
 											name: Item,
-											date: new fire.firestore.Timestamp(1,1)
+											date: new fire.firestore.Timestamp(1,1),
+											user: this.state.displayName,
+											checked: false
 										})
 									})
 								})
