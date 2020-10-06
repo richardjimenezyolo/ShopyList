@@ -43,7 +43,7 @@ class List extends React.Component<IProp, IState> {
 						this.setState({ lts: [] })
 						items.forEach(i => {
 
-							console.log(i.data())
+							// console.log(i.data())
 
 							var lts = this.state.lts
 
