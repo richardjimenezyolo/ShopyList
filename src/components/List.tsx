@@ -114,8 +114,23 @@ class List extends React.Component<IProp, IState> {
 											checked={val.checked}
 											color={color()}
 											mode="ios"
-											onClick={p => {
-												console.log(p.target)
+											value="yolo"
+											onIonChange={p => {
+												const checked = (p.target as any).checked
+
+												// console.log(val)
+
+												db.collection('carts').where("id", "==", this.props.cartId).get().then(docs => {
+													docs.forEach(doc => {
+														// console.log(doc.data())
+
+														db.collection('carts').doc(doc.id).collection('items').doc(val.docId).update({
+															checked: checked
+														})
+
+													})
+												})
+
 											}}
 										/>
 

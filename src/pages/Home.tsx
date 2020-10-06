@@ -98,7 +98,7 @@ class Home extends React.Component<{}, IState> {
 							</IonAvatar>
 
 							<IonLabel>{this.state.displayName}</IonLabel>
-							
+
 						</IonItem>
 
 						<IonItem color="dark">
@@ -136,7 +136,7 @@ class Home extends React.Component<{}, IState> {
 					<IonSearchbar color="dark" />
 
 					<h1>Shopping List:</h1>
-					
+
 
 					<List cartId={this.state.cart} />
 
@@ -153,7 +153,7 @@ class Home extends React.Component<{}, IState> {
 
 					<IonAlert isOpen={this.state.alert} message={this.state.cart} header="Your new cart Id:" onDidDismiss={_ => location.reload()} />
 
-					<IonAlert isOpen={this.state.addAlert} header="Add a new Item" inputs={[
+					<IonAlert isOpen={this.state.addAlert} header="Add a new Item" onDidDismiss={_ => this.setState({ addAlert: false })} inputs={[
 						{
 							name: 'Item',
 							type: 'text',
@@ -174,7 +174,7 @@ class Home extends React.Component<{}, IState> {
 									docs.forEach(doc => {
 										db.collection('carts').doc(doc.id).collection('items').add({
 											name: Item,
-											date: new fire.firestore.Timestamp(1,1),
+											date: new fire.firestore.Timestamp(1, 1),
 											user: this.state.displayName,
 											checked: false,
 											uid: this.state.uid
