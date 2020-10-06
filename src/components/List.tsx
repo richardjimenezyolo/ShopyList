@@ -104,8 +104,6 @@ class List extends React.Component<IProp, IState> {
 
 						}
 
-
-
 						return (
 							<div key={idx}>
 								<IonList >

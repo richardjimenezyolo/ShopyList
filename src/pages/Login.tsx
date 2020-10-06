@@ -13,11 +13,29 @@ class Login extends React.Component {
 		auth.onAuthStateChanged(user => {
 			if (user) {
 				console.log('user')
-				db.collection('users').add({
-					uid: user.uid,
-					cart: 0
+				// db.collection('users').add({
+				// 	uid: user.uid,
+				// 	cart: 0
+				// })
+				db.collection('users').where("uid", "==", user.uid).get().then(docs => {
+					var state = true
+					docs.forEach(i => {
+						console.log(i)
+
+						if (i != undefined) {
+							state = false
+						}
+					})
+
+					if (state) {
+						db.collection('users').add({
+							uid: user.uid,
+							cart: 0
+						})
+					}
+					location.href = '#/'
 				})
-				location.href = "#/";
+				// location.href = "#/";
 			}
 		})
 
