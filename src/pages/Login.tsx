@@ -1,16 +1,7 @@
 import React from "react";
-import { auth, fire } from "../firebase";
+import { auth, fire, db } from "../firebase";
 import {
-	IonApp,
 	IonContent,
-	IonList,
-	IonItem,
-	IonInput,
-	IonLabel,
-	IonItemDivider,
-	IonRow,
-	IonCol,
-	IonGrid,
 	IonButton,
 } from "@ionic/react";
 import { GooglePlus } from "@ionic-native/google-plus";
@@ -18,6 +9,16 @@ import { GooglePlus } from "@ionic-native/google-plus";
 class Login extends React.Component {
 	constructor(props) {
 		super(props);
+
+		auth.onAuthStateChanged(user => {
+			if (user) {
+				console.log('user')
+				db.collection('users').add({
+					uid: user.uid
+				})
+				location.href = "#/";
+			}
+		})
 
 		async function lo() {
 			const gPlusUser = await GooglePlus.login({
@@ -33,63 +34,30 @@ class Login extends React.Component {
 
 			console.log(credential);
 
-			auth.signInWithCredential(credential);
 
-			location.href = '#/';
+
+			auth.signInWithCredential(credential);
+			console.log('user2')
+
+
 		}
 
 		lo();
 	}
 
 	login() {
-		const email = (document.querySelector("#email") as any).value;
-		const pwd = (document.querySelector("#pwd") as any).value;
+		const provider = new fire.auth.GoogleAuthProvider();
+		auth.signInWithPopup(provider);
 
-		auth.signInWithEmailAndPassword(email, pwd).then(out => {
-			location.href = '#/';
-		}).catch((out) => {
-			alert(out);
-		});
-	}
-
-	sign() {
-		const email = (document.querySelector("#email") as any).value;
-		const pwd = (document.querySelector("#pwd") as any).value;
-
-		auth.createUserWithEmailAndPassword(email, pwd).catch((out) => {
-			alert(out);
-		});
 	}
 
 	render() {
 		return (
 			<IonContent className="bg">
-				<div id="loginTitle">
-					<h1>ShopyList</h1>
-				</div>
-
 				<div id="login">
-					<div>
-						<h2>Login:</h2>
-						<IonList>
-							<IonItem color="dark">
-								<IonLabel>Email:</IonLabel>
-								<IonInput type="email" id="email" />
-							</IonItem>
-
-							<IonItemDivider />
-
-							<IonItem color="dark">
-								<IonLabel>Password:</IonLabel>
-								<IonInput type="password" id="pwd" />
-							</IonItem>
-						</IonList>
-
-						<IonButton color="danger" onClick={this.login}>
-							Login
-						</IonButton>
-						<IonButton onClick={this.sign}>Sign Up</IonButton>
-					</div>
+					<IonButton color="danger" onClick={this.login}>
+						Login
+					</IonButton>
 				</div>
 			</IonContent>
 		);
