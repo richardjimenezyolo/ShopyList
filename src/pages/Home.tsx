@@ -176,7 +176,8 @@ class Home extends React.Component<{}, IState> {
 											name: Item,
 											date: new fire.firestore.Timestamp(1,1),
 											user: this.state.displayName,
-											checked: false
+											checked: false,
+											uid: this.state.uid
 										})
 									})
 								})

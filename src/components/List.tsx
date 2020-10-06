@@ -7,6 +7,7 @@ interface Item {
 	name: string;
 	user: string;
 	date: any;
+	docId: string;
 }
 
 interface IProp {
@@ -50,7 +51,8 @@ class List extends React.Component<IProp, IState> {
 								checked: i.data().checked,
 								date: i.data().date,
 								name: i.data().name,
-								user: i.data().user
+								user: i.data().user,
+								docId: i.id
 
 							}
 
@@ -114,6 +116,9 @@ class List extends React.Component<IProp, IState> {
 											checked={val.checked}
 											color={color()}
 											mode="ios"
+											onClick={p => {
+												console.log(p.target)
+											}}
 										/>
 
 										<IonLabel>{val.name}</IonLabel>

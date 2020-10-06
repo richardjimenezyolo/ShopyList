@@ -18,6 +18,8 @@ firebase.initializeApp(firebaseConfig);
 
 (window as any).firebase = firebase;
 
+firebase.firestore().enablePersistence()
+
 export const fire 	= firebase;
 export const db 	= firebase.firestore();
 export const auth 	= firebase.auth();
