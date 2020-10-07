@@ -56,9 +56,15 @@ class Home extends React.Component<{}, IState> {
 					.where("uid", "==", user.uid)
 					.onSnapshot((docs) => {
 						docs.forEach((doc) => {
+							if (doc.data().cart == "0") {
+								this.createCart()
+							}
 							this.setState({ cart: doc.data().cart });
 						});
 					});
+
+
+
 			} else {
 				location.href = "#/login";
 			}

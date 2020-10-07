@@ -3,7 +3,6 @@ import Login from "./pages/Login";
 import Home from "./pages/Home";
 import { IonApp, IonRouterOutlet, IonRoute } from "@ionic/react";
 import { IonReactHashRouter } from "@ionic/react-router";
-
 import "./styles.css";
 
 class App extends React.Component {
