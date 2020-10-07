@@ -1,6 +1,7 @@
 import React from 'react';
-import { IonList, IonItem, IonCheckbox, IonLabel } from '@ionic/react';
+import { IonList, IonItem, IonCheckbox, IonLabel, IonIcon, IonButton } from '@ionic/react';
 import { db } from '../firebase';
+import { removeSharp } from 'ionicons/icons';
 
 interface Item {
 	checked: boolean;
@@ -41,7 +42,6 @@ class List extends React.Component<IProp, IState> {
 
 	loadList() {
 		if (this.props.cartId != '') {
-			console.log("loading List:", this.props.cartId)
 			var unsub = db.collection('carts').where("id", "==", this.props.cartId).onSnapshot(docs => {
 
 				docs.forEach(doc => {
@@ -78,7 +78,7 @@ class List extends React.Component<IProp, IState> {
 		}
 	}
 
-	clickCheck(p, val) {
+	clickCheck(p, val: Item) {
 
 		const checked = (p.target as any).checked
 
@@ -91,6 +91,17 @@ class List extends React.Component<IProp, IState> {
 				db.collection('carts').doc(doc.id).collection('items').doc(val.docId).update({
 					checked: checked
 				})
+
+			})
+		})
+	}
+
+	removeItem(docId: string) {
+		db.collection('carts').where("id", "==", this.props.cartId).get().then(docs => {
+			docs.forEach(doc => {
+				// console.log(doc.data())
+
+				db.collection('carts').doc(doc.id).collection('items').doc(docId).delete()
 
 			})
 		})
@@ -119,6 +130,12 @@ class List extends React.Component<IProp, IState> {
 										/>
 
 										<IonLabel>{val.name}</IonLabel>
+
+										<IonLabel>{val.user}</IonLabel>
+
+										<IonButton fill="outline" color="danger" onClick={_ => this.removeItem(val.docId)} >
+											<IonIcon src={removeSharp}/>
+										</IonButton>
 
 									</IonItem>
 
