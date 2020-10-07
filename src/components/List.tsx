@@ -7,6 +7,7 @@ interface Item {
 	name: string;
 	user: string;
 	date: any;
+	color: string;
 	docId: string;
 }
 
@@ -52,6 +53,7 @@ class List extends React.Component<IProp, IState> {
 								date: i.data().date,
 								name: i.data().name,
 								user: i.data().user,
+								color: i.data().color,
 								docId: i.id
 
 							}
@@ -69,6 +71,24 @@ class List extends React.Component<IProp, IState> {
 		}
 	}
 
+	clickCheck(p, val) {
+
+		const checked = (p.target as any).checked
+
+		// console.log(val)
+
+		db.collection('carts').where("id", "==", this.props.cartId).get().then(docs => {
+			docs.forEach(doc => {
+				// console.log(doc.data())
+
+				db.collection('carts').doc(doc.id).collection('items').doc(val.docId).update({
+					checked: checked
+				})
+
+			})
+		})
+	}
+
 	render() {
 
 		return (
@@ -76,33 +96,6 @@ class List extends React.Component<IProp, IState> {
 				<IonList>
 
 					{this.state.lts.map((val, idx) => {
-
-
-						const color = () => {
-
-							var ran = Math.round(Math.random() * 5)
-
-
-
-							if (ran == 1) {
-								return 'primary'
-							} else if (ran == 2) {
-								return 'secondary'
-							} else if (ran == 3) {
-								return 'success'
-							} else if (ran == 4) {
-								return 'warning'
-							} else if (ran == 5) {
-								return 'danger'
-							}
-
-							if (ran + 1 == 6) {
-								ran = 0
-							} else {
-								ran++
-							}
-
-						}
 
 						return (
 							<div key={idx}>
@@ -112,26 +105,10 @@ class List extends React.Component<IProp, IState> {
 										<IonCheckbox
 											slot="start"
 											checked={val.checked}
-											color={color()}
+											color={val.color}
 											mode="ios"
 											value="yolo"
-											onIonChange={p => {
-												const checked = (p.target as any).checked
-
-												// console.log(val)
-
-												db.collection('carts').where("id", "==", this.props.cartId).get().then(docs => {
-													docs.forEach(doc => {
-														// console.log(doc.data())
-
-														db.collection('carts').doc(doc.id).collection('items').doc(val.docId).update({
-															checked: checked
-														})
-
-													})
-												})
-
-											}}
+											onIonChange={p => this.clickCheck(p, val)}
 										/>
 
 										<IonLabel>{val.name}</IonLabel>

@@ -41,7 +41,7 @@ class Home extends React.Component<{}, IState> {
 			displayName: "",
 			cart: "",
 			addAlert: false,
-			addCartAlert: false
+			addCartAlert: false,
 		};
 
 		auth.onAuthStateChanged((user) => {
@@ -92,6 +92,45 @@ class Home extends React.Component<{}, IState> {
 		this.setState({ alert: true, cart: id.toString() });
 	}
 
+	addItem(Item) {
+		const color = () => {
+			var ran = Math.round(Math.random() * 5);
+
+			if (ran == 1) {
+				return "danger";
+			} else if (ran == 2) {
+				return "secondary";
+			} else if (ran == 3) {
+				return "success";
+			} else if (ran == 4) {
+				return "warning";
+			} else if (ran == 5) {
+				return "primary";
+			}
+
+			if (ran + 1 == 6) {
+				ran = 0;
+			} else {
+				ran++;
+			}
+		};
+		console.log("Added!", Item);
+		this.setState({ addAlert: false });
+
+		db.collection("carts").where("id", "==", this.state.cart).get().then((docs) => {
+				docs.forEach((doc) => {
+					db.collection("carts").doc(doc.id).collection("items").add({
+							name: Item,
+							date: new fire.firestore.Timestamp(1, 1),
+							color: color(),
+							user: this.state.displayName,
+							checked: false,
+							uid: this.state.uid,
+						});
+				});
+			});
+	}
+
 	render() {
 		return (
 			<IonContent>
@@ -114,8 +153,8 @@ class Home extends React.Component<{}, IState> {
 						<IonItem
 							className="ion-activatable ripple-parent"
 							color="dark"
-							onClick={_ => {
-								this.setState({ addCartAlert: true })
+							onClick={(_) => {
+								this.setState({ addCartAlert: true });
 							}}
 						>
 							<IonIcon icon={add} slot="start" />
@@ -161,39 +200,46 @@ class Home extends React.Component<{}, IState> {
 
 					{/* Alerts */}
 
-					<IonAlert isOpen={this.state.addCartAlert} header="Cart Id:"
+					<IonAlert
+						isOpen={this.state.addCartAlert}
+						header="Cart Id:"
 						inputs={[
 							{
-								name: 'cart',
-								type: 'number',
-								placeholder: 'Cart Id...'
-							}
+								name: "cart",
+								type: "number",
+								placeholder: "Cart Id...",
+							},
 						]}
 						buttons={[
 							{
-								text: 'Cancel',
-								handler: _ => {
-									this.setState({ addCartAlert: false })
-								}
+								text: "Cancel",
+								handler: (_) => {
+									this.setState({ addCartAlert: false });
+								},
 							},
 							{
-								text: 'Add',
-								handler: p => {
-									console.log(p)
-									db.collection('users').where("uid", "==", this.state.uid).get().then(docs => {
-										docs.forEach(doc => {
-
-											db.collection('users').doc(doc.id).update({
-												cart: parseInt(p.cart)
-											})
-										})
-									})
-								}
-							}
+								text: "Add",
+								handler: (p) => {
+									console.log(p);
+									db.collection("users")
+										.where("uid", "==", this.state.uid)
+										.get()
+										.then((docs) => {
+											docs.forEach((doc) => {
+												db.collection("users")
+													.doc(doc.id)
+													.update({
+														cart: parseInt(p.cart),
+													});
+											});
+										});
+								},
+							},
 						]}
-						onDidDismiss={_ => {
-							this.setState({ addCartAlert: false })
-						}}></IonAlert>
+						onDidDismiss={(_) => {
+							this.setState({ addCartAlert: false });
+						}}
+					></IonAlert>
 
 					<IonAlert
 						isOpen={this.state.alert}
@@ -221,32 +267,7 @@ class Home extends React.Component<{}, IState> {
 							},
 							{
 								text: "Add",
-								handler: ({ Item }) => {
-									console.log("Added!", Item);
-									this.setState({ addAlert: false });
-
-									db.collection("carts")
-										.where("id", "==", this.state.cart)
-										.get()
-										.then((docs) => {
-											docs.forEach((doc) => {
-												db.collection("carts")
-													.doc(doc.id)
-													.collection("items")
-													.add({
-														name: Item,
-														date: new fire.firestore.Timestamp(
-															1,
-															1
-														),
-														user: this.state
-															.displayName,
-														checked: false,
-														uid: this.state.uid,
-													});
-											});
-										});
-								},
+								handler: ({ Item }) => this.addItem(Item),
 							},
 						]}
 					/>
