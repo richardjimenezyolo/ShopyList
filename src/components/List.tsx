@@ -17,6 +17,7 @@ interface IProp {
 
 interface IState {
 	lts: Array<Item>;
+	unsub: any;
 }
 
 class List extends React.Component<IProp, IState> {
@@ -25,18 +26,23 @@ class List extends React.Component<IProp, IState> {
 		super(props)
 
 		this.state = {
-			lts: []
+			lts: [],
+			unsub: _ => { }
 		}
 
 		this.loadList()
 
 	}
 
+	componentWillReceiveProps() {
+		this.state.unsub()
+		this.loadList()
+	}
+
 	loadList() {
 		if (this.props.cartId != '') {
 			console.log("loading List:", this.props.cartId)
-			db.collection('carts').where("id", "==", this.props.cartId).onSnapshot(docs => {
-
+			var unsub = db.collection('carts').where("id", "==", this.props.cartId).onSnapshot(docs => {
 
 				docs.forEach(doc => {
 
@@ -66,6 +72,7 @@ class List extends React.Component<IProp, IState> {
 					})
 				})
 			})
+			this.setState({ unsub: unsub })
 		} else {
 			setTimeout(_ => this.loadList(), 500)
 		}

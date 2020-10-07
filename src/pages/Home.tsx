@@ -71,8 +71,6 @@ class Home extends React.Component<{}, IState> {
 
 		const uid = this.state.uid;
 
-		console.log(uid);
-
 		db.collection("carts").add({
 			owner: this.state.uid,
 			id: id,
@@ -118,17 +116,17 @@ class Home extends React.Component<{}, IState> {
 		this.setState({ addAlert: false });
 
 		db.collection("carts").where("id", "==", this.state.cart).get().then((docs) => {
-				docs.forEach((doc) => {
-					db.collection("carts").doc(doc.id).collection("items").add({
-							name: Item,
-							date: new fire.firestore.Timestamp(1, 1),
-							color: color(),
-							user: this.state.displayName,
-							checked: false,
-							uid: this.state.uid,
-						});
+			docs.forEach((doc) => {
+				db.collection("carts").doc(doc.id).collection("items").add({
+					name: Item,
+					date: new fire.firestore.Timestamp(1, 1),
+					color: color(),
+					user: this.state.displayName,
+					checked: false,
+					uid: this.state.uid,
 				});
 			});
+		});
 	}
 
 	render() {
@@ -158,7 +156,7 @@ class Home extends React.Component<{}, IState> {
 							}}
 						>
 							<IonIcon icon={add} slot="start" />
-							<IonLabel>Add a Shopping Cart</IonLabel>
+							<IonLabel>Set a Shopping Cart</IonLabel>
 							<IonRippleEffect />
 						</IonItem>
 
@@ -233,6 +231,8 @@ class Home extends React.Component<{}, IState> {
 													});
 											});
 										});
+
+									this.setState({ cart: p.cart })
 								},
 							},
 						]}
@@ -245,7 +245,7 @@ class Home extends React.Component<{}, IState> {
 						isOpen={this.state.alert}
 						message={this.state.cart}
 						header="Your new cart Id:"
-						onDidDismiss={(_) => location.reload()}
+						onDidDismiss={(_) => this.setState({ alert: false })}
 					/>
 
 					<IonAlert
