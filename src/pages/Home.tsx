@@ -1,6 +1,6 @@
 import React from "react";
 import List from "../components/List";
-import { add } from "ionicons/icons";
+import { add, cartSharp } from "ionicons/icons";
 import {
 	IonContent,
 	IonMenu,
@@ -173,7 +173,7 @@ class Home extends React.Component<{}, IState> {
 							className="ion-activatable ripple-parent"
 							color="dark"
 						>
-							<IonIcon icon={add} slot="start" />
+							<IonIcon icon={cartSharp} slot="start" />
 							<IonLabel>Create a Shopping Cart</IonLabel>
 							<IonRippleEffect />
 						</IonItem>
