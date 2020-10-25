@@ -1,3 +1,4 @@
+import { hot } from 'react-hot-loader/root';
 import React from "react";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
@@ -10,7 +11,6 @@ class App extends React.Component {
 		return (
 			<IonApp>
 				<IonRouterOutlet />
-
 				<IonReactHashRouter>
 					<IonRoute
 						path="/"
@@ -32,4 +32,4 @@ class App extends React.Component {
 	}
 }
 
-export default App;
+export default hot(App);
