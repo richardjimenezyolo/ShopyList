@@ -3,6 +3,7 @@ import { auth, fire, db } from "../firebase";
 import {
 	IonContent,
 	IonButton,
+	isPlatform
 } from "@ionic/react";
 import { GooglePlus } from "@ionic-native/google-plus";
 
@@ -61,7 +62,12 @@ class Login extends React.Component {
 
 		}
 
-		lo();
+		console.log("Mobile",isPlatform('mobile'))
+		console.log("desktop",isPlatform('desktop'))
+
+		if(isPlatform('mobile')) {
+			lo()
+		}
 	}
 
 	login() {
