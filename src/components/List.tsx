@@ -18,7 +18,6 @@ interface IProp {
 
 interface IState {
 	lts: Array<Item>;
-	unsub: any;
 }
 
 class List extends React.Component<IProp, IState> {
@@ -28,7 +27,6 @@ class List extends React.Component<IProp, IState> {
 
 		this.state = {
 			lts: [],
-			unsub: _ => { }
 		}
 
 		this.loadList()
@@ -36,17 +34,16 @@ class List extends React.Component<IProp, IState> {
 	}
 
 	componentWillReceiveProps() {
-		this.state.unsub()
 		this.loadList()
 	}
 
 	loadList() {
 		if (this.props.cartId != '') {
-			var unsub = db.collection('carts').where("id", "==", this.props.cartId).onSnapshot(docs => {
+			db.collection('carts').where("id", "==", this.props.cartId).get().then(docs => {
 
 				docs.forEach(doc => {
 
-					db.collection('carts').doc(doc.id).collection('items').onSnapshot(items => {
+					db.collection('carts').doc(doc.id).collection('items').get().then(items => {
 						this.setState({ lts: [] })
 						items.forEach(i => {
 
@@ -72,7 +69,6 @@ class List extends React.Component<IProp, IState> {
 					})
 				})
 			})
-			this.setState({ unsub: unsub })
 		} else {
 			setTimeout(_ => this.loadList(), 500)
 		}
@@ -101,7 +97,9 @@ class List extends React.Component<IProp, IState> {
 			docs.forEach(doc => {
 				// console.log(doc.data())
 
-				db.collection('carts').doc(doc.id).collection('items').doc(docId).delete()
+				db.collection('carts').doc(doc.id).collection('items').doc(docId).delete().then(_ => {
+					this.loadList()
+				})
 
 			})
 		})
@@ -125,7 +123,7 @@ class List extends React.Component<IProp, IState> {
 											checked={val.checked}
 											color={val.color}
 											mode="ios"
-											value="yolo"
+											// value="yolo"
 											onIonChange={p => this.clickCheck(p, val)}
 										/>
 
